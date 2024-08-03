@@ -5,6 +5,7 @@ import (
 )
 
 func InitRoutes(router *gin.Engine) {
+	// router.POST("/welcome", WelcomeDemo)
 	router.POST("/import", ImportData)
 	router.GET("/view", ViewData)
 	router.PUT("/edit/:id", EditData)
