@@ -7,6 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ImportData godoc
+// @Summary Import data from an Excel file
+// @Description Uploads an Excel file and imports the data
+// @Tags import
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "Excel file"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /import [post]
 func ImportData(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {

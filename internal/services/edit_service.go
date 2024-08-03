@@ -4,18 +4,11 @@ import (
 	"go-import-manage/internal/models"
 	"go-import-manage/internal/repositories/mysql"
 	"go-import-manage/internal/repositories/redis"
-	"log"
-	"strconv"
 )
 
-func EditService(id string, record models.Record) error {
-	// Convert string ID to int
-	intID, err := strconv.Atoi(id)
-	if err != nil {
-		log.Printf("Invalid ID: %v", err)
-		return err
-	}
-	if err := mysql.UpdateRecord(intID, record); err != nil {
+func EditService(id int, record models.Record) error {
+
+	if err := mysql.UpdateRecord(id, record); err != nil {
 		return err
 	}
 
