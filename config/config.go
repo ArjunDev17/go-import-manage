@@ -35,6 +35,9 @@ func LoadConfig() {
 	RedisPassword = getEnv("REDIS_PASSWORD", "")
 	RedisDB = getEnv("REDIS_DB", "0")
 	ServerPort = getEnv("SERVER_PORT", "8080")
+
+	log.Printf("MySQLUser: %s, MySQLPassword: %s, MySQLDB: %s, MySQLHost: %s, MySQLPort: %s",
+		MySQLUser, MySQLPassword, MySQLDB, MySQLHost, MySQLPort)
 }
 
 func getEnv(key, defaultValue string) string {

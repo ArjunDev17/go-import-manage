@@ -25,4 +25,9 @@ func InitRedis() {
 		Password: config.RedisPassword, // No password set
 		DB:       dbNum,                // Use the converted integer value
 	})
+	_, err = RDB.Ping(Ctx).Result()
+	if err != nil {
+		log.Fatalf("Could not connect to Redis: %v", err)
+	}
+	log.Println("Connected to Redis successfully")
 }
