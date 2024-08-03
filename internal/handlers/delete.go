@@ -7,6 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// DeleteData godoc
+// @Summary Delete a specific record
+// @Description Deletes a specific record from the database and cache
+// @Tags delete
+// @Produce json
+// @Param id path int true "Record ID"
+// @Success 200 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /delete/{id} [delete]
 func DeleteData(c *gin.Context) {
 	id := c.Param("id")
 
