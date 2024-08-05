@@ -22,9 +22,10 @@ func InitRedis() {
 
 	RDB = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", config.RedisHost, config.RedisPort),
-		Password: config.RedisPassword, // No password set
-		DB:       dbNum,                // Use the converted integer value
+		Password: config.RedisPassword,
+		DB:       dbNum,
 	})
+
 	_, err = RDB.Ping(Ctx).Result()
 	if err != nil {
 		log.Fatalf("Could not connect to Redis: %v", err)
