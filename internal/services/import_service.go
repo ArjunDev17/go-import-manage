@@ -12,7 +12,7 @@ import (
 )
 
 func ImportService(file *multipart.FileHeader) error {
-
+	// Open the file
 	f, err := file.Open()
 	if err != nil {
 		return fmt.Errorf("failed to open file: %w", err)
@@ -25,22 +25,16 @@ func ImportService(file *multipart.FileHeader) error {
 		return fmt.Errorf("failed to parse Excel file: %w", err)
 	}
 
+	log.Printf("Parsed %d records from Excel file", len(records))
+
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 	var errs []error
 
 	for _, record := range records {
-
 		wg.Add(1)
 		go func(record models.Record) {
 			defer wg.Done()
-			defer func() {
-				if r := recover(); r != nil {
-					mu.Lock()
-					errs = append(errs, fmt.Errorf("panic occurred: %v", r))
-					mu.Unlock()
-				}
-			}()
 			if err := mysql.InsertRecord(record); err != nil {
 				mu.Lock()
 				errs = append(errs, fmt.Errorf("failed to insert record: %w", err))
@@ -50,22 +44,20 @@ func ImportService(file *multipart.FileHeader) error {
 	}
 
 	wg.Wait()
-	fmt.Println("step 5")
-	if len(errs) > 0 {
 
+	if len(errs) > 0 {
 		for _, err := range errs {
 			log.Println(err)
 		}
 		return fmt.Errorf("errors occurred during import")
 	}
 
-	fmt.Println("calling cache REcords")
-	err = redis.CacheRecords(records)
-	if err != nil {
-		fmt.Printf("failed to cache records: %v\n", err)
+	log.Println("All records inserted into MySQL")
+
+	if err := redis.CacheRecords(records); err != nil {
+		log.Printf("Failed to cache records: %v", err)
 		return fmt.Errorf("failed to cache records: %w", err)
 	}
-	fmt.Println("after calling cache REcords")
 
 	log.Printf("Successfully cached %d records in Redis", len(records))
 	return nil
