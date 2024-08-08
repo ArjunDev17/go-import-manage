@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"go-import-manage/internal/services"
-	"net/http"
+	"go-import-manage/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,8 +18,8 @@ import (
 func ViewData(c *gin.Context) {
 	data, err := services.ViewService()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.RespondError(c, err.Error(), "Failed to retrieve data")
 		return
 	}
-	c.JSON(http.StatusOK, data)
+	utils.RespondSuccess(c, data, "Data retrieved successfully")
 }

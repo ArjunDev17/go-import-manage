@@ -31,10 +31,15 @@ func ImportService(file *multipart.FileHeader) error {
 	var mu sync.Mutex
 	var errs []error
 
+	sem := make(chan struct{}, 10) // limit to 10 concurrent goroutines
+
 	for _, record := range records {
 		wg.Add(1)
 		go func(record models.Record) {
 			defer wg.Done()
+			sem <- struct{}{}        // acquire a token
+			defer func() { <-sem }() // release the token
+
 			if err := mysql.InsertRecord(record); err != nil {
 				mu.Lock()
 				errs = append(errs, fmt.Errorf("failed to insert record: %w", err))

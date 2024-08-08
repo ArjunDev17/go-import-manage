@@ -25,7 +25,16 @@ func InitMySQL() {
 		log.Fatalf("Could not connect to MySQL: %v\n", err)
 	}
 
+	// Set the maximum number of open connections
+	DB.SetMaxOpenConns(100)
+	// Set the maximum number of idle connections
+	DB.SetMaxIdleConns(10)
+	// Set the maximum lifetime of a connection
+	DB.SetConnMaxLifetime(0)
+
 	if err = DB.Ping(); err != nil {
 		log.Fatalf("Could not ping MySQL: %v\n", err)
 	}
+
+	log.Println("Connected to MySQL successfully")
 }
