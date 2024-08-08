@@ -8,10 +8,12 @@ func InsertRecord(record models.Record) error {
 	query := `INSERT INTO records (
 		first_name, last_name, company_name, address, city, county, postal, phone, email, web
 	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
 	_, err := DB.Exec(query,
 		record.FirstName, record.LastName, record.CompanyName, record.Address,
 		record.City, record.County, record.Postal, record.Phone,
 		record.Email, record.Web)
+
 	return err
 }
 

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const cacheExpiration = 5 * time.Minute
+const cacheExpiration = 2 * time.Minute
 
 func CacheRecords(records []models.Record) error {
 	data, err := json.Marshal(records)
@@ -16,6 +16,7 @@ func CacheRecords(records []models.Record) error {
 		return err
 	}
 
+	log.Println("Attempting to cache records in Redis")
 	err = RDB.Set(Ctx, "records", data, cacheExpiration).Err()
 	if err != nil {
 		log.Printf("Error caching records in Redis: %v", err)
