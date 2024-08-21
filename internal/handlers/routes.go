@@ -1,13 +1,20 @@
 package handlers
 
 import (
+	middleware "go-import-manage/internal/midleware"
+
 	"github.com/gin-gonic/gin"
 )
 
 func InitRoutes(router *gin.Engine) {
-	// router.POST("/welcome", WelcomeDemo)
-	router.POST("/import", ImportData)
-	router.GET("/view", ViewData)
-	router.PUT("/edit/:id", EditData)
-	router.DELETE("/delete/:id", DeleteData)
+	// Grouping the routes under "/api"
+	dataGroup := router.Group("/api")
+	{
+
+		dataGroup.POST("/import", middleware.FileValidationMiddleware(), ImportData)
+
+		dataGroup.GET("/view", ViewData)
+		dataGroup.PUT("/edit/:id", EditData)
+		dataGroup.DELETE("/delete/:id", DeleteData)
+	}
 }

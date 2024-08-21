@@ -21,7 +21,6 @@ func ParseExcel(file io.Reader) ([]models.Record, error) {
 	if len(sheetNames) == 0 {
 		return nil, errors.New("no sheets found in the excel file")
 	}
-
 	var sheetName string
 	for _, name := range sheetNames {
 		sheetName = name
